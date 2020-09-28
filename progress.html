@@ -139,7 +139,7 @@
         <div class="progress-container">
             <div class="complete-bar" style="width: <%=progressWidth%>%;">
                 <div class="payment-connection"></div>
-                <img class="current-icon" src="assets/images/oa/progress_current.png">
+                <img class="current-icon" src="assets/images/progress_current.png"></img>
             </div>
             <div class="uncomplete-bar"></div>
             <% var stageList = paymentRecordData.PaymentModelList %>
@@ -149,9 +149,9 @@
                     <% lastWidth += parseFloat(stageList[i].ReturnPercent) %>
                     <div class="stage-container" style="margin-left: <%=lastWidth%>%;">
                         <% if(progressWidth >= lastWidth) { %>
-                        <img class="stage-icon" src="assets/images/oa/progress_complete.png">
+                        <img class="stage-icon" src="assets/images/progress_complete.png"></img>
                         <% } else { %>
-                        <img class="stage-icon" src="assets/images/oa/progress_uncomplete.png">
+                        <img class="stage-icon" src="assets/images/progress_uncomplete.png"></img>
                         <% } %>
                         <div class="stage-content">
                             <span><%=stageList[i].PayType%></span>
