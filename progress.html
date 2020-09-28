@@ -1,0 +1,168 @@
+<style>
+    .payment-record .payment-progress {
+        width: 100%;
+        height: 300px;
+        padding-top: 35px;
+    }
+
+    .payment-record .actual-payment {
+        width: 678px;
+        height: 52px;
+        padding: 0 20px;
+        border-radius: 26px;
+        border: 2px solid #25BC9E;
+    }
+
+    .payment-record .actual-payment div {
+        height: 100%;
+        margin: 0 20px;
+        font-size: 14px;
+        display: inline-block;
+    }
+
+    .payment-record .actual-payment div span {
+        line-height: 52px;
+    }
+
+    .payment-record .actual-value {
+        color: #25BC9E;
+    }
+
+    .payment-record .payment-connection {
+        right: 0;
+        top: -50px;
+        width: 2px;
+        height: 48px;
+        position: absolute;
+        background-size: 2px 12px;
+        background-repeat: repeat-y;
+        background-image: linear-gradient(to bottom, #25BC9E 0%, #25BC9E 50%, transparent 50%);
+    }
+
+    .payment-record .progress-container {
+        width: 85%;
+        height: 8px;
+        margin-left: 5%;
+        margin-top: 50px;
+        position: absolute;
+    }
+
+    .payment-record .complete-bar{
+        z-index: 10;
+        height: 100%;
+        position: absolute;
+        border-radius: 4px;
+        background-color: #25BC9E;
+    }
+
+    .payment-record .uncomplete-bar {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        border-radius: 4px;
+        background-color: #EEF3F3;
+    }
+
+    .payment-record .current-icon {
+        top: -14px;
+        right: -13px;
+        position: absolute;
+    }
+
+    /* .payment-record .stage-outside {
+        margin-top: 90px;
+    } */
+
+    .payment-record .stage-container {
+        height: 66px;
+        min-width: 108px;
+        margin-top: 38px;
+        position: absolute;
+    }
+
+    .payment-record .stage-container span {
+        font-size: 14px;
+        line-height: 30px;
+    }
+
+    .payment-record .stage-icon {
+        z-index: 10;
+        margin-left: -16%;
+        margin-top: -54px;
+        position: absolute;
+    }
+
+    .payment-record .stage-content {
+        margin-left: -45%;
+    }
+
+    .payment-record .stage-plan {
+        padding: 5px;
+        font-size: 10px;
+        font-weight: normal;
+    }
+
+    .payment-record .stage-subscript {
+        width: 56px;
+        height: 20px;
+        margin-left: 5px;
+        text-align: center;
+        border-radius: 10px;
+        display: inline-block;
+        border: 1px solid #25BC9E;
+        background-color: #E9F8F5;
+    }
+</style>
+<div class="table_box payment-record">
+    <div class="payment-progress">
+        <% var progressWidth = parseFloat(paymentRecordData.ReturnPercentAll); %>
+        <% if(progressWidth <= 14) { %>
+            <div class="actual-payment">
+        <% } else if(progressWidth > 14 && progressWidth < 85) { %>
+            <div class="actual-payment" style="margin-left: <%=(progressWidth - 14)%>%;">
+        <% } else { %>
+            <div class="actual-payment" style="margin-left: 60%;">
+        <% }%>
+                <div>
+                    <span>实际回款比例:</span>
+                    <span class="actual-value"><%=paymentRecordData.ReturnPercentAll%></span>
+                </div>
+                <div>
+                    <span>实际回款金额:</span>
+                    <span class="actual-value"><%=paymentRecordData.PaymentAll%> (元)</span>
+                </div>
+                <div>
+                    <span>最新回款时间:</span>
+                    <span class="actual-value"><%=paymentRecordData.LastReturnTime%></span>
+                </div>
+            </div>
+        <div class="progress-container">
+            <div class="complete-bar" style="width: <%=progressWidth%>%;">
+                <div class="payment-connection"></div>
+                <img class="current-icon" src="assets/images/oa/progress_current.png">
+            </div>
+            <div class="uncomplete-bar"></div>
+            <% var stageList = paymentRecordData.PaymentModelList %>
+            <% if(stageList.length > 0) { %>
+                <% var lastWidth = 0;%>
+                <% for(var i = 0; i < stageList.length; i ++) { %>
+                    <% lastWidth += parseFloat(stageList[i].ReturnPercent) %>
+                    <div class="stage-container" style="margin-left: <%=lastWidth%>%;">
+                        <% if(progressWidth >= lastWidth) { %>
+                        <img class="stage-icon" src="assets/images/oa/progress_complete.png">
+                        <% } else { %>
+                        <img class="stage-icon" src="assets/images/oa/progress_uncomplete.png">
+                        <% } %>
+                        <div class="stage-content">
+                            <span><%=stageList[i].PayType%></span>
+                            <span class="stage-plan">(计划)</span>
+                            <span>:</span><br/>
+                            <span><%=stageList[i].PlanAmount%>(元)</span>
+                            <div class="stage-subscript"><%=stageList[i].ReturnPercent%></div>
+                        </div>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+</div>
